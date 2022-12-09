@@ -13,15 +13,7 @@ spring:
         locator:
           enabled: true
       routes:
-        - id: importadorapucallpa-service
-          uri: lb://importadorapucallpa-service
+        - id: multiserviciosfuentes-service
+          uri: lb://multiserviciosfuentes-service
           predicates:
-            - Path=/importadorapucallpa/**
-        - id: product-service
-          uri: lb://product-service
-          predicates:
-            - Path=/products/**
-        - id: shopping-service
-          uri: lb://shopping-service
-          predicates:
-            - Path=/invoices/**
+            - Path=/multiserviciosfuentes/**
