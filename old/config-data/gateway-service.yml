@@ -1,0 +1,19 @@
+server:
+  port: 80
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8099/eureka/
+
+spring:
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id: multiserviciosfuentes-service
+          uri: lb://multiserviciosfuentes-service
+          predicates:
+            - Path=/multiserviciosfuentes/**

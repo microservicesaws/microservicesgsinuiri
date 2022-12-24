@@ -1,0 +1,77 @@
+version: "3.8"
+services:
+  # postgres:
+  #   container_name: postgres
+  #   image: postgres:latest
+  #   networks:
+  #     - spring-db
+  #   environment:
+  #     - POSTGRES_USER=postgres
+  #     - POSTGRES_PASSWORD=giansm1992
+  #   ports:
+  #     - 5432:5432
+  #   restart: always
+  # pgadmin:
+  #   container_name: pgadmin
+  #   image: dpage/pgadmin4:latest
+  #   networks:
+  #     - spring-db
+  #   environment:
+  #     - PGADMIN_DEFAULT_EMAIL=gsinuiri@gmail.com
+  #     - PGADMIN_DEFAULT_PASSWORD=postgres
+  #   ports:
+  #     - 5050:80
+  #   restart: always
+  config:
+    container_name: config-service
+    image: gsinuiri/config-service:latest
+    networks:
+      - spring-app
+    ports:
+      - 8081:8081 
+  registry:
+    container_name: registry-service
+    image: gsinuiri/registry-service:latest
+    networks:
+      - spring-app
+    ports:
+      - 8099:8099
+    depends_on:
+      - config
+  # admin:
+  #   container_name: admin-service
+  #   image: gsinuiri/admin-service:latest
+  #   networks:
+  #     - spring-app
+  #   ports:
+  #     - 8086:8086
+  #   depends_on:
+  #     - config
+  #     - registry     
+  # gateway:
+  #   container_name: gateway-service
+  #   image: gsinuiri/gateway-service:latest
+  #   networks:
+  #     - spring-app
+  #   ports:
+  #     - 80:80
+  #   depends_on:
+  #     - config
+  #     - registry
+  # sysfrank:
+  #   container_name: sysfrank-service
+  #   image: gsinuiri/sysfrank-service:latest
+  #   networks:
+  #     - spring-app
+  #     - spring-db
+  #   ports:
+  #     - 8091:8091
+  #   depends_on:
+  #     - config
+  #     - registry
+  #     - admin
+  #     - gateway
+  #     - postgres
+networks:
+  spring-app:
+  spring-db:

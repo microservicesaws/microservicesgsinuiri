@@ -7,11 +7,11 @@ spring:
       server:
         git:
           uri: https://github.com/microservicesaws/microservicesgsinuiri
-          searchPaths: config-data
-          username: ${GIT_USER}
-          password: ${GIT_PASSWORD}
           default-label: master
-          skip-ssl-validation: true
+          searchPaths: config-data
+#          username: ${GIT_USER}
+#          password: ${GIT_PASSWORD}
+#          skip-ssl-validation: true
   security:
     user:
       name: root
