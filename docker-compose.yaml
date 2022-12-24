@@ -28,7 +28,13 @@ services:
     networks:
       - spring-app
     ports:
-      - 8081:8081 
+      - 8081:8081
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8081/actuator/health"]
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
   registry:
     container_name: registry-service
     image: gsinuiri/registry-service:latest
@@ -37,7 +43,8 @@ services:
     ports:
       - 8099:8099
     depends_on:
-      - config
+      config:
+        condition: service_healthy
   # admin:
   #   container_name: admin-service
   #   image: gsinuiri/admin-service:latest
