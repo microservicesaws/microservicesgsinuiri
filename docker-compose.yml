@@ -99,7 +99,7 @@ services:
         condition: service_healthy   
     environment:
       CLOUD_SEA_CONFIG_SERVER_URI: http://config:8081
-      EUREKA-DEFAULT-ZONE: http://registry:8099
+      EUREKA_DEFAULT_ZONE: http://registry:8099
 
   sysfrank:
     container_name: sysfrank-service
@@ -120,7 +120,7 @@ services:
         condition: service_healthy   
     environment:
       CLOUD_SEA_CONFIG_SERVER_URI: http://config:8081
-      EUREKA-DEFAULT-ZONE: http://registry:8099
+      EUREKA_DEFAULT_ZONE: http://registry:8099
       CLOUD_ADMIN_URL: http://admin:8086
       POSTGRES_URL: postgres:5432
 

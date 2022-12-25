@@ -13,7 +13,7 @@ logging:
 eureka:
   client:
     serviceUrl:
-      defaultZone: ${EUREKA-DEFAULT-ZONE}/eureka/
+      defaultZone: ${EUREKA_DEFAULT_ZONE}/eureka/
       
 management:
   endpoints:
