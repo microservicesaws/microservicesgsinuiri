@@ -1,0 +1,17 @@
+# spring.application.name=registry-service
+
+# # spring.config.import=optional:configserver:${CLOUD_SEA_CONFIG_SERVER_URI}
+# spring.config.import=optional:configserver:http://localhost:8081
+
+# spring.cloud.config.username=root
+# spring.cloud.config.password==s3cr3t
+
+spring:
+  application:
+    name: registry-service
+  config:
+    import: optional:configserver:${CLOUD_SEA_CONFIG_SERVER_URI}
+  cloud:
+    config:
+      username: root
+      password: s3cr3t

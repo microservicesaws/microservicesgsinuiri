@@ -1,0 +1,9 @@
+spring:
+  config:
+    import: optional:configserver:${CLOUD_SEA_CONFIG_SERVER_URI}
+  application:
+    name: gateway-service
+  cloud:
+    config:
+      username: root
+      password: s3cr3t

@@ -31,10 +31,11 @@ services:
       - 8081:8081
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8081/actuator/health"]
-      interval: 1m30s
+      interval: 10s
       timeout: 10s
       retries: 3
-      start_period: 40s
+      start_period: 20s
+
   registry:
     container_name: registry-service
     image: gsinuiri/registry-service:latest
@@ -42,29 +43,52 @@ services:
       - spring-app
     ports:
       - 8099:8099
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8099/actuator/health"]
+      interval: 10s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
     depends_on:
       config:
         condition: service_healthy
-  # admin:
-  #   container_name: admin-service
-  #   image: gsinuiri/admin-service:latest
-  #   networks:
-  #     - spring-app
-  #   ports:
-  #     - 8086:8086
-  #   depends_on:
-  #     - config
-  #     - registry     
-  # gateway:
-  #   container_name: gateway-service
-  #   image: gsinuiri/gateway-service:latest
-  #   networks:
-  #     - spring-app
-  #   ports:
-  #     - 80:80
-  #   depends_on:
-  #     - config
-  #     - registry
+    environment:
+      CLOUD_SEA_CONFIG_SERVER_URI: http://config:8081
+
+  admin:
+    container_name: admin-service
+    image: gsinuiri/admin-service:latest
+    networks:
+      - spring-app
+    ports:
+      - 8086:8086
+    depends_on:
+      config:
+        condition: service_healthy   
+      registry:
+        condition: service_healthy   
+
+  gateway:
+    container_name: gateway-service
+    image: gsinuiri/gateway-service:latest
+    networks:
+      - spring-app
+    ports:
+      - 80:80
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/actuator/health"]
+      interval: 10s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+    depends_on:
+      config:
+        condition: service_healthy   
+      registry:
+        condition: service_healthy   
+    environment:
+      CLOUD_SEA_CONFIG_SERVER_URI: http://config:8081
+      EUREKA-DEFAULT-ZONE: http://registry:8099
   # sysfrank:
   #   container_name: sysfrank-service
   #   image: gsinuiri/sysfrank-service:latest
