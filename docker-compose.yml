@@ -54,6 +54,7 @@ services:
         condition: service_healthy
     environment:
       CLOUD_SEA_CONFIG_SERVER_URI: http://config:8081
+      EUREKA-DEFAULT-ZONE: http://registry:8099
 
   admin:
     container_name: admin-service
