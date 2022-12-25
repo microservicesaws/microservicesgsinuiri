@@ -4,7 +4,7 @@ server:
 eureka:
   client:
     serviceUrl:
-      defaultZone: ${EUREKA-DEFAULT-ZONE}
+      defaultZone: ${EUREKA-DEFAULT-ZONE}/eureka/
 
 spring:
   cloud:

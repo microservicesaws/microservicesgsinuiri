@@ -13,7 +13,7 @@ logging:
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://localhost:8099/eureka/
+      defaultZone: ${EUREKA-DEFAULT-ZONE}/eureka/
       
 management:
   endpoints:

@@ -1,27 +1,31 @@
 version: "3.8"
 services:
-  # postgres:
-  #   container_name: postgres
-  #   image: postgres:latest
-  #   networks:
-  #     - spring-db
-  #   environment:
-  #     - POSTGRES_USER=postgres
-  #     - POSTGRES_PASSWORD=giansm1992
-  #   ports:
-  #     - 5432:5432
-  #   restart: always
-  # pgadmin:
-  #   container_name: pgadmin
-  #   image: dpage/pgadmin4:latest
-  #   networks:
-  #     - spring-db
-  #   environment:
-  #     - PGADMIN_DEFAULT_EMAIL=gsinuiri@gmail.com
-  #     - PGADMIN_DEFAULT_PASSWORD=postgres
-  #   ports:
-  #     - 5050:80
-  #   restart: always
+  postgres:
+    container_name: postgres
+    image: postgres:latest
+    networks:
+      - spring-db
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=giansm1992
+    ports:
+      - 5432:5432
+    restart: always
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4:latest
+    networks:
+      - spring-db
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=gsinuiri@gmail.com
+      - PGADMIN_DEFAULT_PASSWORD=postgres
+    ports:
+      - 5050:80
+    restart: always
+
   config:
     container_name: config-service
     image: gsinuiri/config-service:latest
@@ -54,7 +58,7 @@ services:
         condition: service_healthy
     environment:
       CLOUD_SEA_CONFIG_SERVER_URI: http://config:8081
-      EUREKA-DEFAULT-ZONE: http://registry:8099
+      EUREKA-DEFAULT-ZONE: registry
 
   admin:
     container_name: admin-service
@@ -63,6 +67,12 @@ services:
       - spring-app
     ports:
       - 8086:8086
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8086/actuator/health"]
+      interval: 10s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
     depends_on:
       config:
         condition: service_healthy   
@@ -90,20 +100,32 @@ services:
     environment:
       CLOUD_SEA_CONFIG_SERVER_URI: http://config:8081
       EUREKA-DEFAULT-ZONE: http://registry:8099
-  # sysfrank:
-  #   container_name: sysfrank-service
-  #   image: gsinuiri/sysfrank-service:latest
-  #   networks:
-  #     - spring-app
-  #     - spring-db
-  #   ports:
-  #     - 8091:8091
-  #   depends_on:
-  #     - config
-  #     - registry
-  #     - admin
-  #     - gateway
-  #     - postgres
+
+  sysfrank:
+    container_name: sysfrank-service
+    image: gsinuiri/sysfrank-service:latest
+    networks:
+      - spring-app
+      - spring-db
+    ports:
+      - 8091:8091
+    depends_on:
+      config:
+        condition: service_healthy   
+      registry:
+        condition: service_healthy   
+      admin:
+        condition: service_healthy   
+      gateway:
+        condition: service_healthy   
+    environment:
+      CLOUD_SEA_CONFIG_SERVER_URI: http://config:8081
+      EUREKA-DEFAULT-ZONE: http://registry:8099
+      CLOUD_ADMIN_URL: http://admin:8086
+      POSTGRES_URL: postgres:5432
+
+volumes:
+  db-data:
 networks:
   spring-app:
   spring-db:
